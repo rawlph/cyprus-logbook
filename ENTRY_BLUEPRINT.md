@@ -1,4 +1,4 @@
-# ENTRY BLUEPRINT – The crew's log (rich narrative entries)
+# ENTRY BLUEPRINT – Cyprus Logbook (rich narrative entries)
 
 **Read this file + `src/content/entries/_template.md` every time you are asked to create a new entry.**
 

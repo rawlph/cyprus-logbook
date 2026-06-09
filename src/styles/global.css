@@ -144,10 +144,7 @@ a {
   border-left: 1px solid rgba(70, 58, 43, 0.16); /* warm stone thread, matches prose h3 accent */
 }
 
-/* PhotoReel (sketch-matched carousel with readable captions) */
-.photo-reel .photo-reel-caption {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
+/* PhotoReel captions get their shadow via inline styles for better control */
 
 /* Comparison table – clean maritime boxed style, not too rigid */
 .comparison-table table th {

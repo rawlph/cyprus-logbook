@@ -23,13 +23,11 @@ The south coast of Cyprus holds a quiet record of the island’s birth. The very
 
 ## Description
 
-When you walk across these outcrops the surface feels like steeled sand under your boots — firm, yet with a certain give. Freshly broken pieces feel gritty and partially crumble between your fingers. Flick a finger against a clean face and you get a surprisingly metallic, hollow sound. The rock captures the sun beautifully, glowing even in low light. In places the surface is pocked with rounded hollows and deep alcoves — the tafoni that give these outcrops their almost architectural look. Strike a fresh piece with another stone or a hammer and it rings with a sharp, slightly metallic note — the sound of its sand-sized grains shifting inside the cement.
+When you walk across these outcrops the surface feels like steeled sand under your boots — hard and unyielding. Freshly broken pieces feel gritty and partially crumble between your fingers. The rock captures the sun beautifully, glowing even in low light. In places the surface is pocked with rounded hollows and deep alcoves — these 'tafoni' give the outcrops their almost architectural look. A light knock produces a surprisingly metallic, hollow sound.
 
 ## Observations
 
-Locals and guides on Cyprus are rarely shy about sketching the island’s topography for you. Stand on these south-coast cliffs and they will point out the main features right away.
-
-To the south rises the broad Troodos massif, the island’s central mountain heart. To the north runs the long, serrated Kyrenia Range. Between them lies the wide central lowland known as the Mesaoria — the plain that stretches east to west across much of the island.
+The topography of the island is something you can't quite miss when you stand on these south-coast cliffs. To the south rises the broad Troodos massif, the island’s central mountain heart. To the north runs the long, serrated Kyrenia Range. Between them lies the wide central lowland known as the Mesaoria — the plain that stretches east to west across much of the island.
 
 The Mesaoria refers mainly to this interior basin and its flat to gently rolling lowlands between the northern and southern ranges. The coastal plateaus and cliffs we are standing on sit on the uplifted southern edge of the same ancient structural depression.
 
@@ -55,7 +53,7 @@ You might wonder where the groundwater comes from if all this sand was once sitt
 
 Because the uplift happened relatively quickly, there wasn’t enough time or burial pressure for the cement to fill every pore. That left the rock porous — exactly the quality that later made it so susceptible to haloclasty.
 
-### Why It Weathers and Sounds This Way
+### Use as a Building Material
 
 This combination of coarse grains and incomplete cementation makes the stone both historically useful — it was quarried and sawn for building in places like Nicosia — and vulnerable once it is exposed at the coast.
 

@@ -18,13 +18,11 @@ The south coast of Cyprus holds a quiet record of the island’s birth. The very
 
 ## Description
 
-When you walk across these outcrops the surface feels like [sensory: steeled sand / firm with give]. Freshly broken pieces feel [gritty / crumble at edges]. Flick a finger against a clean face and you get a [metallic, hollow sound]. The rock captures the sun [beautifully / glows even in low light]. In places the surface is pocked with [weathering features — the tafoni...]. Strike a fresh piece with another stone or a hammer and it rings with a sharp, slightly metallic note — the sound of its [structure] shifting inside the cement.
+When you walk across these outcrops the surface feels like [sensory: steeled sand — hard and unyielding]. Freshly broken pieces feel [gritty / crumble at edges]. The rock captures the sun [beautifully / glows even in low light]. In places the surface is pocked with [weathering features — these 'tafoni' give the outcrops their almost architectural look]. A light knock produces a [metallic, hollow sound].
 
 ## Observations
 
-Locals and guides on Cyprus are rarely shy about sketching the island’s topography for you. Stand on these [coastal / location] and they will point out the main features right away.
-
-To the south rises the broad [southern massif], the island’s central mountain heart. To the north runs the long, serrated [northern range]. Between them lies the wide central lowland known as the [Mesaoria / equivalent] — the plain that stretches across much of the island.
+The topography of the island is something you can't quite miss when you stand on these [coastal / location] cliffs. To the south rises the broad [southern massif], the island’s central mountain heart. To the north runs the long, serrated [northern range]. Between them lies the wide central lowland known as the [Mesaoria / equivalent] — the plain that stretches across much of the island.
 
 The [Mesaoria] refers mainly to this interior basin and its flat to gently rolling lowlands between the northern and southern ranges. The coastal plateaus and cliffs we are standing on sit on the uplifted [southern / relevant] edge of the same ancient structural depression.
 
@@ -50,7 +48,7 @@ You might wonder where the groundwater comes from if all this [material] was onc
 
 Because the uplift happened relatively quickly, there wasn’t enough time or burial pressure for the cement to fill every pore. That left the rock porous — exactly the quality that later made it so susceptible to [the weathering process].
 
-### Why It Weathers and Sounds This Way
+### Use as a Building Material
 
 This combination of coarse grains and incomplete cementation makes the stone both historically useful — it was quarried and sawn for building in places like [local example] — and vulnerable once it is exposed at the coast.
 
