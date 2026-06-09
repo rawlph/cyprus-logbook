@@ -1,0 +1,27 @@
+---
+const currentPath = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Log' },
+  { href: '/archive', label: 'Archive' },
+  { href: '/glossary', label: 'Glossary' },
+];
+---
+
+<nav class="w-full border-b border-black/5 bg-[#f9f6f0]/90 backdrop-blur supports-[backdrop-filter]:bg-[#f9f6f0]/85">
+  <div class="mx-auto max-w-3xl px-5 py-[15px] flex items-center justify-between">
+    <a href="/" class="font-serif text-[17.5px] tracking-[-0.25px] text-[#1f1f1f] hover:text-black transition-colors">
+      The crew’s log
+    </a>
+
+    <div class="flex items-center gap-x-7 text-sm">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class={`transition-colors hover:text-black ${currentPath === link.href ? 'text-black font-medium' : 'text-[#4a4a4a]'}`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>

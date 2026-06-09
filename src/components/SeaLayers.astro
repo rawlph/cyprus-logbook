@@ -1,0 +1,132 @@
+---
+interface Props {
+  mood?: 'underwater' | 'coastal' | 'sky' | 'parchment' | 'deep';
+  class?: string;
+}
+
+const { mood = 'coastal', class: className = '' } = Astro.props;
+
+const moods = {
+  underwater: {
+    base: 'from-[#0a2238] via-[#0e2f4a] to-[#081a2b]',
+    flow: 'sea',
+  },
+  coastal: {
+    base: 'from-[#c4d4e3] via-[#e0d1b3] to-[#c3af85]',
+    flow: 'coastal',
+  },
+  sky: {
+    base: 'from-[#b5c9de] via-[#d3dce9] to-[#a7b8cc]',
+    flow: 'sky',
+  },
+  parchment: {
+    base: 'from-[#f4f0e7] via-[#efe6d9] to-[#e5d8c3]',
+    flow: 'land',
+  },
+  deep: {
+    base: 'from-[#0d2538] via-[#132d42] to-[#0a1f32]',
+    flow: 'sea',
+  },
+};
+
+const current = moods[mood] ?? moods.coastal;
+const isSea = current.flow === 'sea' || current.flow === 'coastal';
+const isLand = current.flow === 'land' || current.flow === 'coastal' || current.flow === 'sky';
+---
+
+<div class={`layers fixed inset-0 pointer-events-none -z-10 overflow-hidden ${className}`}>
+  <!-- Deep base atmosphere -->
+  <div class={`absolute inset-0 bg-gradient-to-b ${current.base}`}></div>
+
+  <!-- Large, soft atmospheric washes (these create continuous depth without obvious tiling) -->
+  <div class="absolute inset-0 opacity-[0.12]"
+       style="background: radial-gradient(ellipse at 38% 22%, rgba(255,250,235,0.22) 0%, transparent 55%);"></div>
+  <div class="absolute inset-0 opacity-[0.08]"
+       style="background: radial-gradient(ellipse at 72% 78%, rgba(180,200,220,0.18) 0%, transparent 60%);"></div>
+
+  <!-- Very large, slow-moving "surface" or "current" flow layers -->
+  {isSea && (
+    <>
+      <!-- Primary slow horizontal flow (large scale, very soft) -->
+      <div class="absolute inset-0 opacity-[0.035] animate-[seaFlow_65s_linear_infinite]"
+           style="background: repeating-linear-gradient(
+             172deg,
+             transparent 0%,
+             transparent 180px,
+             rgba(255,255,255,0.65) 185px,
+             transparent 520px
+           ); background-size: 820px 420px;">
+      </div>
+
+      <!-- Secondary cross flow (different angle + speed for natural feel) -->
+      <div class="absolute inset-0 opacity-[0.022] animate-[seaFlow2_92s_linear_infinite]"
+           style="background: repeating-linear-gradient(
+             8deg,
+             transparent 0%,
+             transparent 260px,
+             rgba(255,255,255,0.55) 268px,
+             transparent 610px
+           ); background-size: 1100px 380px;">
+      </div>
+    </>
+  )}
+
+  <!-- Soft drifting light / god rays for underwater and deep moods -->
+  {(mood === 'underwater' || mood === 'deep') && (
+    <>
+      <div class="absolute inset-y-0 left-[12%] w-[28%] opacity-[0.07] animate-[rayDrift1_80s_ease-in-out_infinite]"
+           style="background: linear-gradient(82deg, transparent 20%, rgba(175,205,225,0.35) 48%, transparent 78%);"></div>
+      <div class="absolute inset-y-0 left-[38%] w-[22%] opacity-[0.055] animate-[rayDrift2_110s_ease-in-out_infinite]"
+           style="background: linear-gradient(78deg, transparent 25%, rgba(170,200,225,0.32) 52%, transparent 82%);"></div>
+      <div class="absolute inset-y-0 right-[18%] w-[19%] opacity-[0.045] animate-[rayDrift3_135s_ease-in-out_infinite]"
+           style="background: linear-gradient(85deg, transparent 18%, rgba(180,210,230,0.28) 50%, transparent 75%);"></div>
+    </>
+  )}
+
+  <!-- Distant continuous land / horizon forms (soft, non-geometric, layered for depth) -->
+  {(mood === 'coastal' || mood === 'sky') && (
+    <>
+      <!-- Far haze land -->
+      <div class="absolute bottom-[6%] left-[-8%] right-[-12%] h-[32%] opacity-[0.06]"
+           style="background: linear-gradient(to top, rgba(60,55,45,0.7) 0%, transparent 68%);
+                  filter: blur(1px); border-radius: 40% 30% 0 0 / 20% 15%;"></div>
+      <!-- Nearer softer land mass -->
+      <div class="absolute bottom-0 left-[-4%] right-[-6%] h-[24%] opacity-[0.09]"
+           style="background: linear-gradient(to top, rgba(45,42,38,0.65) 0%, transparent 72%);
+                  border-radius: 50% 35% 0 0 / 18%;"></div>
+    </>
+  )}
+
+  <!-- Extremely gentle large-scale texture for parchment / land moods (no small noise) -->
+  {mood === 'parchment' && (
+    <div class="absolute inset-0 opacity-[0.018]"
+         style="background: radial-gradient(circle at 30% 40%, rgba(120,100,70,0.12) 0%, transparent 55%),
+                 radial-gradient(circle at 68% 72%, rgba(110,95,70,0.09) 0%, transparent 48%);"></div>
+  )}
+
+  <!-- Very soft overall vignette so the edges recede naturally -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_52%,rgba(0,0,0,0.018)_86%)]"></div>
+</div>
+
+<style>
+  @keyframes seaFlow {
+    0% { background-position: 0 0; }
+    100% { background-position: -820px 140px; }
+  }
+  @keyframes seaFlow2 {
+    0% { background-position: 0 0; }
+    100% { background-position: 1100px -90px; }
+  }
+  @keyframes rayDrift1 {
+    0%, 100% { transform: translateX(-4%) rotate(-1deg); }
+    50% { transform: translateX(3%) rotate(1deg); }
+  }
+  @keyframes rayDrift2 {
+    0%, 100% { transform: translateX(2%) rotate(0.6deg); }
+    50% { transform: translateX(-3.5%) rotate(-0.8deg); }
+  }
+  @keyframes rayDrift3 {
+    0%, 100% { transform: translateX(-2%) rotate(-0.4deg); }
+    50% { transform: translateX(4%) rotate(0.5deg); }
+  }
+</style>

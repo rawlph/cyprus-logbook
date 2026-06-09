@@ -1,0 +1,166 @@
+---
+/**
+ * Reusable Wikipedia-style Table of Contents for rich narrative entries.
+ * 
+ * - Auto-generates from h2/h3 inside .entry-prose
+ * - IntersectionObserver for active section highlighting while scrolling
+ * - Smooth scroll to sections
+ * - Mobile: collapsible via <details> (open on md+)
+ * - Consistent subtle hierarchy: h2 at base level, h3 indented with a thin left thread line
+ * - Only the currently active section (via observer) receives bold treatment — no keyword exceptions
+ * - Fits calm maritime aesthetic: small, quiet, non-cluttered
+ * 
+ * Usage (in EntryLayout after PhotoReel, before prose):
+ *   <TableOfContents />
+ * 
+ * Or pass manual headings for full control.
+ * Integrates with ComparisonTabs by optionally including "Visual comparison" as last item.
+ */
+
+interface Heading {
+  id: string;
+  text: string;
+  level: number;
+}
+
+interface Props {
+  headings?: Heading[]; // Optional manual; defaults to auto-scan
+  includeVisualComparison?: boolean; // Auto-add link to #visual-comparison if present
+  title?: string;
+}
+
+const { 
+  headings: manualHeadings, 
+  includeVisualComparison = true,
+  title = "Contents"
+} = Astro.props;
+---
+
+<nav class="table-of-contents not-prose mb-6 rounded-lg border border-black/10 bg-white/50 p-3 text-sm md:mb-8" aria-label="Table of contents">
+  <details class="group md:open" open>
+    <summary class="cursor-pointer list-none text-[11px] font-medium uppercase tracking-[0.75px] text-[#5c6b7a] select-none md:pointer-events-none md:cursor-default">
+      {title}
+      <span class="md:hidden text-[#999] group-open:rotate-180 inline-block transition-transform">▼</span>
+    </summary>
+
+    <ul class="mt-2 space-y-1 pl-1 text-[#333]">
+      <!-- Populated by script (auto) or server (manual) -->
+      {manualHeadings && manualHeadings.map((h) => (
+        <li class={h.level === 3 ? 'pl-3' : ''}>
+          <a href={`#${h.id}`} class="hover:text-black transition-colors">{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </details>
+</nav>
+
+<script>
+  function initTableOfContents() {
+    const container = document.querySelector('.table-of-contents');
+    if (!container) return;
+
+    const prose = document.querySelector('.entry-prose');
+    if (!prose) return;
+
+    // Collect headings (h2 + h3)
+    const headingEls = prose.querySelectorAll(':scope > h2, :scope > h3');
+    if (headingEls.length < 2) {
+      container.style.display = 'none';
+      return;
+    }
+
+    const list = container.querySelector('ul');
+    if (!list) return;
+
+    list.innerHTML = ''; // Clear any server content for auto mode
+
+    const headings = Array.from(headingEls).map(el => ({
+      id: el.id,
+      text: el.textContent?.trim() || '',
+      level: parseInt(el.tagName[1]),
+      el: el as HTMLElement
+    })).filter(h => h.id && h.text);
+
+    // Build list items — consistent treatment for all headings.
+    // h3s are indented (pl-3) so the thin left thread line in CSS signals sub-section level.
+    // Active state (observer) is the only thing that bolds an entry.
+    headings.forEach(h => {
+      const li = document.createElement('li');
+      if (h.level === 3) li.className = 'pl-3';
+
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.text;
+      a.className = 'hover:text-black transition-colors block py-0.5';
+
+      // Smooth scroll
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(h.id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Update URL without jump
+          history.pushState(null, '', `#${h.id}`);
+        }
+      });
+
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    // IntersectionObserver for active state
+    const links = list.querySelectorAll('a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.id;
+        const link = list.querySelector(`a[href="#${id}"]`);
+        if (link) {
+          if (entry.isIntersecting) {
+            links.forEach(l => l.classList.remove('font-semibold', 'text-[#1f1f1f]'));
+            link.classList.add('font-semibold', 'text-[#1f1f1f]');
+          }
+        }
+      });
+    }, {
+      rootMargin: '-80px 0px -40% 0px', // Offset for header/reel
+      threshold: 0.1
+    });
+
+    headingEls.forEach(el => observer.observe(el));
+
+    // Optional: include Visual Comparison if element exists
+    const viz = document.getElementById('visual-comparison');
+    if (viz && !list.querySelector('a[href="#visual-comparison"]')) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#visual-comparison';
+      a.textContent = 'Visual comparison';
+      a.className = 'hover:text-black transition-colors block py-0.5 mt-1 border-t border-black/5 pt-1';
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        viz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', '#visual-comparison');
+      });
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTableOfContents);
+  } else {
+    initTableOfContents();
+  }
+</script>
+
+<style>
+  .table-of-contents a {
+    color: inherit;
+  }
+  .table-of-contents a.font-semibold {
+    color: #1f1f1f;
+  }
+  .table-of-contents summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

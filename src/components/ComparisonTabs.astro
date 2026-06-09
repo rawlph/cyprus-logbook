@@ -1,0 +1,122 @@
+---
+/**
+ * Reusable tabbed comparison component for rich entries.
+ * 
+ * Usage in an entry page (after <Content /> or at the end of Deeper Notes):
+ *   <ComparisonTabs 
+ *     title="Comparative soundings"
+ *     items={[
+ *       { label: "Calcarenite", subtitle: "(Athalassa Member, South Cyprus)", content: "..." },
+ *       ...
+ *     ]} 
+ *   />
+ *
+ * Designed to match the calm, hands-on, maritime log aesthetic.
+ * One card with a top tab bar. Click to switch the info below.
+ */
+
+interface ComparisonItem {
+  label: string;
+  subtitle?: string;
+  content: string; // Can be HTML or markdown-style text (rendered as-is)
+}
+
+interface Props {
+  title?: string;
+  items: ComparisonItem[];
+  defaultIndex?: number;
+}
+
+const { 
+  title = "Comparative soundings", 
+  items, 
+  defaultIndex = 0 
+} = Astro.props;
+
+const safeDefault = Math.min(Math.max(defaultIndex, 0), items.length - 1);
+---
+
+<div class="comparison-card not-prose my-8 rounded-xl border border-black/10 bg-white/70 p-4 shadow-sm">
+  {title && (
+    <div class="mb-3 text-[12px] font-medium uppercase tracking-[0.75px] text-[#5c6b7a]">
+      {title}
+    </div>
+  )}
+
+  <!-- Tab bar -->
+  <div class="tab-bar flex border-b border-black/10 mb-4 text-sm" role="tablist">
+    {items.map((item, index) => (
+      <button 
+        data-index={index}
+        class={`tab-button flex-1 py-2 px-3 text-center font-medium transition-colors ${index === safeDefault ? 'active border-b-2 border-[#92400e] text-[#92400e]' : 'text-[#5c6b7a] hover:text-[#333]'}`}
+        role="tab"
+        aria-selected={index === safeDefault ? "true" : "false"}
+      >
+        {item.label}
+      </button>
+    ))}
+  </div>
+
+  <!-- Content panes -->
+  <div class="content-area">
+    {items.map((item, index) => (
+      <div 
+        data-content-index={index}
+        class={`content-pane ${index === safeDefault ? '' : 'hidden'}`}
+      >
+        {item.subtitle && (
+          <div class="text-[11px] text-[#5c6b7a] mb-2">{item.subtitle}</div>
+        )}
+        <div class="text-[13.5px] leading-snug text-[#333]" set:html={item.content} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  function initComparisonTabs() {
+    const container = document.querySelector('.comparison-card');
+    if (!container) return;
+
+    const tabs = container.querySelectorAll('.tab-button');
+    const panes = container.querySelectorAll('.content-pane');
+
+    tabs.forEach((tab, tabIndex) => {
+      tab.addEventListener('click', () => {
+        const targetIndex = parseInt(tab.dataset.index || '0');
+
+        // Update tabs
+        tabs.forEach((t, i) => {
+          const isActive = i === targetIndex;
+          t.classList.toggle('active', isActive);
+          t.classList.toggle('border-b-2', isActive);
+          t.classList.toggle('border-[#92400e]', isActive);
+          t.classList.toggle('text-[#92400e]', isActive);
+          t.classList.toggle('text-[#5c6b7a]', !isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        // Update panes
+        panes.forEach((pane, i) => {
+          pane.classList.toggle('hidden', i !== targetIndex);
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initComparisonTabs);
+  } else {
+    initComparisonTabs();
+  }
+</script>
+
+<style>
+  .tab-button {
+    transition: all 120ms ease;
+    border-bottom: 2px solid transparent;
+  }
+  .content-pane {
+    transition: opacity 150ms ease;
+  }
+</style>

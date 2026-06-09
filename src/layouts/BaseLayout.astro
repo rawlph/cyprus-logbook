@@ -1,0 +1,99 @@
+---
+import Nav from '../components/Nav.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "The crew’s log", description = "A calm maritime archive of Cyprus — botanical, geological, historical, religious, and linguistic observations." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-[#f8f5f0] text-[#2c2c2c] font-sans antialiased">
+    <Nav />
+
+    <slot />
+
+    <footer class="mt-20 border-t border-black/5 py-9 text-center text-xs text-[#6b6b6b]">
+      <div class="mx-auto max-w-3xl px-5">
+        The crew’s log • A collection of observations from the shores and waters of Cyprus
+      </div>
+    </footer>
+
+    <!-- Lightweight glossary peek script (shared across pages) -->
+    <script>
+      // Glossary term peek card (zero-dependency, tiny)
+      function initGlossaryPeek() {
+        const terms = document.querySelectorAll<HTMLElement>('.glossary-term');
+
+        let activeCard: HTMLDivElement | null = null;
+
+        function closeCard() {
+          if (activeCard) {
+            activeCard.remove();
+            activeCard = null;
+          }
+        }
+
+        document.addEventListener('click', (e) => {
+          if (activeCard && !activeCard.contains(e.target as Node)) {
+            closeCard();
+          }
+        });
+
+        terms.forEach((el) => {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeCard();
+
+            const term = el.dataset.term || '';
+            const definition = el.dataset.definition || '';
+            const greek = el.dataset.greek || '';
+            const etymology = el.dataset.etymology || '';
+
+            const card = document.createElement('div');
+            card.className = 'fixed z-50 max-w-[320px] rounded-xl border border-black/10 bg-white/95 p-4 text-sm shadow-xl backdrop-blur';
+            card.style.left = `${Math.min((e as MouseEvent).clientX + 12, window.innerWidth - 340)}px`;
+            card.style.top = `${(e as MouseEvent).clientY + 14}px`;
+
+            card.innerHTML = `
+              <div class="font-medium tracking-tight text-[#222]">${el.textContent}</div>
+              ${greek ? `<div class="mt-0.5 text-xs text-[#666] font-mono">${greek}</div>` : ''}
+              <div class="mt-2 leading-snug text-[#3a3a3a]">${definition}</div>
+              ${etymology ? `<div class="mt-2 text-[12px] italic text-[#555]">${etymology}</div>` : ''}
+              <a href="/glossary#${term}" class="mt-3 inline-block text-xs text-[#4a4a4a] underline underline-offset-2 hover:text-black">View in glossary →</a>
+            `;
+
+            document.body.appendChild(card);
+            activeCard = card;
+
+            // Close on escape
+            const onEsc = (ev: KeyboardEvent) => {
+              if (ev.key === 'Escape') {
+                closeCard();
+                document.removeEventListener('keydown', onEsc);
+              }
+            };
+            document.addEventListener('keydown', onEsc, { once: true });
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGlossaryPeek);
+      } else {
+        initGlossaryPeek();
+      }
+    </script>
+  </body>
+</html>

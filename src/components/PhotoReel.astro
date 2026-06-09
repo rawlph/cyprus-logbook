@@ -1,0 +1,219 @@
+---
+interface GalleryImage {
+  src: string;
+  caption: string;
+  alt?: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+}
+
+const { images } = Astro.props;
+
+if (!images || images.length === 0) {
+  return null;
+}
+---
+
+<div class="photo-reel not-prose my-6" data-images={JSON.stringify(images)}>
+  <div class="relative overflow-hidden rounded-xl border border-black/10 bg-[#f4f1e9] shadow-sm">
+    <!-- Main image -->
+    <img
+      id="reel-image"
+      src={images[0].src}
+      alt={images[0].alt || images[0].caption}
+      class="w-full aspect-[16/10] object-cover cursor-zoom-in transition-opacity duration-200"
+    />
+
+    <!-- Caption bar (clearly readable, high contrast, maritime) -->
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1f1f1f]/80 via-[#1f1f1f]/70 to-transparent px-4 py-3">
+      <p id="reel-caption" class="text-[14px] leading-snug text-[#f9f6f0] font-light tracking-tight">
+        {images[0].caption}
+      </p>
+    </div>
+  </div>
+
+  <!-- Navigation (exactly like the sketch: arrows + 1/4 counter) -->
+  <div class="mt-3 flex items-center justify-center gap-4 text-sm text-[#555]">
+    <button
+      class="prev-btn flex h-8 w-8 items-center justify-center rounded-full border border-black/10 text-lg leading-none transition hover:bg-black/5 hover:text-black active:bg-black/10"
+      aria-label="Previous photo"
+    >
+      ←
+    </button>
+
+    <span id="reel-counter" class="font-mono text-xs tracking-[1px] text-[#666]">
+      1 / {images.length}
+    </span>
+
+    <button
+      class="next-btn flex h-8 w-8 items-center justify-center rounded-full border border-black/10 text-lg leading-none transition hover:bg-black/5 hover:text-black active:bg-black/10"
+      aria-label="Next photo"
+    >
+      →
+    </button>
+  </div>
+</div>
+
+<!-- Lightweight lightbox (expandable, no extra deps) -->
+<div id="lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4">
+  <div class="relative max-h-[92vh] max-w-[96vw]" >
+    <img
+      id="lightbox-image"
+      class="max-h-[82vh] max-w-full rounded-lg object-contain shadow-2xl"
+      alt=""
+    />
+    <div class="mt-3 text-center">
+      <p id="lightbox-caption" class="mx-auto max-w-[70ch] text-[15px] leading-snug text-[#e8e4d9]"></p>
+    </div>
+
+    <!-- Lightbox controls -->
+    <button class="lb-close absolute -top-3 -right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xl text-black shadow hover:bg-white" aria-label="Close">×</button>
+
+    <button class="lb-prev absolute left-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-2xl text-black shadow hover:bg-white" aria-label="Previous">←</button>
+    <button class="lb-next absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-2xl text-black shadow hover:bg-white" aria-label="Next">→</button>
+  </div>
+</div>
+
+<script>
+  // Robust init for Astro (module script, no reliance on currentScript)
+  function initPhotoReel() {
+    const root = document.querySelector('.photo-reel');
+    if (!root) return;
+
+    const imagesData = JSON.parse(root.dataset.images || '[]');
+    if (!imagesData.length) return;
+
+    let currentIndex = 0;
+
+    const imgEl = document.getElementById('reel-image');
+    const capEl = document.getElementById('reel-caption');
+    const counterEl = document.getElementById('reel-counter');
+    const prevBtn = root.querySelector('.prev-btn');
+    const nextBtn = root.querySelector('.next-btn');
+
+    function updateReel() {
+      if (!imgEl || !capEl || !counterEl) return;
+      const current = imagesData[currentIndex];
+      imgEl.src = current.src;
+      imgEl.alt = current.alt || current.caption;
+      capEl.textContent = current.caption;
+      counterEl.textContent = `${currentIndex + 1} / ${imagesData.length}`;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + imagesData.length) % imagesData.length;
+      updateReel();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % imagesData.length;
+      updateReel();
+    }
+
+    // Attach listeners (reliable, no inline onclick)
+    if (prevBtn) prevBtn.addEventListener('click', prevImage);
+    if (nextBtn) nextBtn.addEventListener('click', nextImage);
+    if (imgEl) imgEl.addEventListener('click', openLightbox);
+
+    // Lightbox
+    let lightboxIndex = 0;
+
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbCap = document.getElementById('lightbox-caption');
+    const lbClose = lb ? lb.querySelector('.lb-close') : null;
+    const lbPrev = lb ? lb.querySelector('.lb-prev') : null;
+    const lbNext = lb ? lb.querySelector('.lb-next') : null;
+
+    function openLightbox() {
+      if (!lb || !lbImg || !lbCap) return;
+      lightboxIndex = currentIndex;
+      const current = imagesData[lightboxIndex];
+      lbImg.src = current.src;
+      lbImg.alt = current.alt || current.caption;
+      lbCap.textContent = current.caption;
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      if (!lb) return;
+      lb.classList.remove('flex');
+      lb.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      if (!lbImg || !lbCap) return;
+      const current = imagesData[lightboxIndex];
+      lbImg.src = current.src;
+      lbImg.alt = current.alt || current.caption;
+      lbCap.textContent = current.caption;
+    }
+
+    function prevLightbox(e) {
+      if (e) e.stopImmediatePropagation();
+      lightboxIndex = (lightboxIndex - 1 + imagesData.length) % imagesData.length;
+      updateLightbox();
+    }
+
+    function nextLightbox(e) {
+      if (e) e.stopImmediatePropagation();
+      lightboxIndex = (lightboxIndex + 1) % imagesData.length;
+      updateLightbox();
+    }
+
+    if (lbClose) lbClose.addEventListener('click', closeLightbox);
+    if (lbPrev) lbPrev.addEventListener('click', prevLightbox);
+    if (lbNext) lbNext.addEventListener('click', nextLightbox);
+
+    // Close on backdrop click
+    if (lb) {
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) closeLightbox();
+      });
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      const isLightboxOpen = lb && !lb.classList.contains('hidden');
+      if (e.key === 'Escape' && isLightboxOpen) {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        if (isLightboxOpen) {
+          prevLightbox();
+        } else {
+          prevImage();
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (isLightboxOpen) {
+          nextLightbox();
+        } else {
+          nextImage();
+        }
+      }
+    });
+
+    // Initial render
+    updateReel();
+  }
+
+  // Run on DOM ready (works with Astro module scripts)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotoReel);
+  } else {
+    initPhotoReel();
+  }
+</script>
+
+<style>
+  .photo-reel img {
+    display: block;
+  }
+  #lightbox {
+    backdrop-filter: blur(2px);
+  }
+</style>

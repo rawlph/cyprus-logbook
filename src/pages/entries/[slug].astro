@@ -1,0 +1,76 @@
+---
+import { getCollection, render } from 'astro:content';
+import EntryLayout from '../../layouts/EntryLayout.astro';
+import Term from '../../components/Term.astro';
+import ComparisonTabs from '../../components/ComparisonTabs.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('entries');
+  return entries.map((entry) => {
+    const cleanSlug = entry.id.replace(/\.mdx?$/, '');
+    return {
+      params: { slug: cleanSlug },
+      props: { entry, slug: cleanSlug },
+    };
+  });
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<EntryLayout
+  title={entry.data.title}
+  topic={entry.data.topic}
+  date={entry.data.date}
+  summary={entry.data.summary}
+  layer={entry.data.layer}
+  slug={slug}
+  gallery={entry.data.gallery}
+>
+  <Content components={{ Term, ComparisonTabs }} />
+  {slug === 'calcarenite-of-the-south-shore' && (
+    <ComparisonTabs
+      title="Comparative soundings"
+      id="visual-comparison"
+      items={[
+        {
+          label: "Calcarenite",
+          subtitle: "(Athalassa Member, South Cyprus)",
+          content: `<div class="space-y-2.5 text-[#333] text-[13.5px]">
+            <div><div class="font-medium text-[#1f1f1f]">Texture / Grain size</div><div class="leading-snug">Sand-sized (0.06–2 mm) carbonate grains, often cross-bedded. Feels gritty, like a sandstone made of shells.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</div><div class="leading-snug">Mostly calcite from bioclasts. High porosity (15–30%+) — water and salts penetrate easily.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</div><div class="leading-snug">Relatively soft and friable (Mohs ~3). Can be cut or break along grain boundaries. Historically used as building stone because it is workable.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Age &amp; Environment</div><div class="leading-snug">Pliocene (~5–2.5 Ma). Shallow, high-energy marine seaway between rising landmasses. Cross-bedded sands.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Haloclasty Response</div><div class="leading-snug">Highly susceptible. Sea spray drives salt crystallization → classic tafoni (honeycomb) and granular sand.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Cyprus Context</div><div class="leading-snug">Historic building stone (“Nicosia calcarenite”). Valued today for its sculptural weathering and as a record of the island’s emergence.</div></div>
+          </div>`
+        },
+        {
+          label: "Chalk",
+          subtitle: "(e.g. Lefkara Formation)",
+          content: `<div class="space-y-2.5 text-[#333] text-[13.5px]">
+            <div><div class="font-medium text-[#1f1f1f]">Texture / Grain size</div><div class="leading-snug">Extremely fine (mostly &lt;0.06 mm nannofossils &amp; micrite). Smooth, almost powdery when weathered.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</div><div class="leading-snug">Almost pure fine calcite. Very high porosity but tiny pores; more uniform and “chalky”.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</div><div class="leading-snug">Very soft. Scratches easily. Weathers more by dissolution/powdering than flaking.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Age &amp; Environment</div><div class="leading-snug">Much older (Paleogene, ~50+ Ma). Deep, quiet pelagic seas — fine ooze settling from the water column.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Haloclasty Response</div><div class="leading-snug">Less dramatic. Tends to soften and powder rather than develop deep tafoni.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Cyprus Context</div><div class="leading-snug">Widely used for carved architectural detail (softer to work). Forms the pale hills across much of the island.</div></div>
+          </div>`
+        },
+        {
+          label: "Limestone",
+          subtitle: "(typical examples)",
+          content: `<div class="space-y-2.5 text-[#333] text-[13.5px]">
+            <div><div class="font-medium text-[#1f1f1f]">Texture / Grain size</div><div class="leading-snug">Larger framework fossils bound in place. More massive and “stony” to the touch.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</div><div class="leading-snug">Calcite framework + cement. Lower porosity, denser fabric overall.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</div><div class="leading-snug">Harder and more resistant due to cementation and bound structure. Better for durable work.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Age &amp; Environment</div><div class="leading-snug">Variable (often Miocene or older reef build-ups). Warm, shallow, clear waters where organisms grew in place.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Haloclasty Response</div><div class="leading-snug">Much more resistant. Slower physical breakdown even when exposed to spray.</div></div>
+            <div><div class="font-medium text-[#1f1f1f]">Cyprus Context</div><div class="leading-snug">Often used for more massive blocks or decorative elements. More resistant outcrops with different fossil assemblages.</div></div>
+          </div>`
+        }
+      ]}
+    />
+  )}
+</EntryLayout>

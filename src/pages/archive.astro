@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EntryCard from '../components/EntryCard.astro';
+import { getCollection } from 'astro:content';
+
+const allEntries = await getCollection('entries');
+
+// Sort newest first by date if present
+const sorted = [...allEntries].sort((a, b) => {
+  const da = a.data.date ? new Date(a.data.date).getTime() : 0;
+  const db = b.data.date ? new Date(b.data.date).getTime() : 0;
+  return db - da;
+});
+
+const topics = ['All', 'Botany', 'Geology', 'History', 'Religion', 'Language'] as const;
+
+// Support initial filter via ?topic=Botany etc.
+const initialTopic = Astro.url.searchParams.get('topic');
+const validInitial = initialTopic && topics.includes(initialTopic as any) ? initialTopic : 'All';
+---
+
+<BaseLayout title="Archive — The crew’s log">
+  <main class="mx-auto max-w-3xl px-5 pt-9 pb-16">
+    <div class="mb-6">
+      <h1 class="font-serif text-[34px] tracking-[-0.5px]">The Archive</h1>
+      <p class="mt-0.5 text-[#555]">Observations arranged by the nature of what we found.</p>
+      <div class="wave-divider mt-4"></div>
+    </div>
+
+    <!-- Topic filters -->
+    <div id="filters" class="flex flex-wrap gap-2 mb-8">
+      {topics.map((topic) => (
+        <button
+          class={`filter-btn ${topic === validInitial ? 'active' : ''}`}
+          data-topic={topic}
+          data-color={topic === 'All' ? 'slate' : topic.toLowerCase()}
+        >
+          {topic}
+        </button>
+      ))}
+    </div>
+
+    <div id="entries-grid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {sorted.map((entry) => {
+        const slug = entry.id.replace(/\.mdx?$/, '');
+        return (
+          <div class="entry-card" data-topic={entry.data.topic}>
+            <EntryCard
+              title={entry.data.title}
+              slug={slug}
+              topic={entry.data.topic}
+              summary={entry.data.summary}
+              date={entry.data.date}
+            />
+          </div>
+        );
+      })}
+    </div>
+
+    <div id="no-results" class="hidden mt-8 text-sm text-[#666]">
+      No entries match this filter yet.
+    </div>
+  </main>
+
+  <style>
+    /* Colored active filter states for more maritime personality */
+    .filter-btn[data-color="botany"].active { background: #166534; border-color: #166534; color: #f1f5f0; }
+    .filter-btn[data-color="geology"].active { background: #92400e; border-color: #92400e; color: #fef3e8; }
+    .filter-btn[data-color="history"].active { background: #1e3a5f; border-color: #1e3a5f; color: #e0e7f1; }
+    .filter-btn[data-color="religion"].active { background: #854d0e; border-color: #854d0e; color: #fef6e8; }
+    .filter-btn[data-color="language"].active { background: #1e40af; border-color: #1e40af; color: #e0e7ff; }
+  </style>
+
+  <script>
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>('#filters .filter-btn');
+    const cards = document.querySelectorAll<HTMLElement>('.entry-card');
+    const noResults = document.getElementById('no-results')!;
+
+    let currentFilter = 'All';
+
+    function applyFilter(topic: string) {
+      currentFilter = topic;
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardTopic = card.dataset.topic;
+        const match = topic === 'All' || cardTopic === topic;
+
+        if (match) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const topic = btn.dataset.topic || 'All';
+        applyFilter(topic);
+      });
+    });
+
+    // Apply initial filter from ?topic= param (client-side, supports links from home like /archive?topic=Botany)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTopic = urlParams.get('topic');
+    if (urlTopic && ['Botany','Geology','History','Religion','Language'].includes(urlTopic)) {
+      const initialBtn = Array.from(filterButtons).find(b => b.dataset.topic === urlTopic);
+      if (initialBtn) {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        initialBtn.classList.add('active');
+        applyFilter(urlTopic);
+      }
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'a') {
+        filterButtons[0].click();
+      }
+      const num = parseInt(e.key);
+      if (!isNaN(num) && num >= 1 && num <= 5) {
+        const target = filterButtons[num];
+        if (target) target.click();
+      }
+    });
+  </script>
+</BaseLayout>

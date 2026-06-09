@@ -1,0 +1,221 @@
+---
+/**
+ * Responsive comparison for the Calcarenite entry.
+ * Uses a card layout instead of a wide table:
+ * - Mobile: stacked vertical cards (easy to read, no scrolling)
+ * - Desktop: 3 columns side-by-side (rich comparison without ugly horizontal sliders)
+ * 
+ * Fits the calm, text-focused, maritime log aesthetic.
+ * Calcarenite (the subject) is visually prominent.
+ */
+---
+
+<div class="comparison-card not-prose my-8 rounded-xl border border-black/10 bg-white/70 p-4 shadow-sm">
+  <div class="mb-3 text-[12px] font-medium uppercase tracking-[0.75px] text-[#5c6b7a]">
+    Comparative soundings
+  </div>
+
+  <!-- Tab layer / top selector -->
+  <div class="tab-bar flex border-b border-black/10 mb-4 text-sm" role="tablist">
+    <button 
+      data-type="calcarenite" 
+      class="tab-button flex-1 py-2 px-3 text-center font-medium border-b-2 border-[#92400e] text-[#92400e] active"
+      role="tab"
+      aria-selected="true"
+    >
+      Calcarenite
+    </button>
+    <button 
+      data-type="chalk" 
+      class="tab-button flex-1 py-2 px-3 text-center font-medium text-[#5c6b7a] hover:text-[#333]"
+      role="tab"
+      aria-selected="false"
+    >
+      Chalk
+    </button>
+    <button 
+      data-type="limestone" 
+      class="tab-button flex-1 py-2 px-3 text-center font-medium text-[#5c6b7a] hover:text-[#333]"
+      role="tab"
+      aria-selected="false"
+    >
+      Limestone
+    </button>
+  </div>
+
+  <!-- Content area -->
+  <div class="content-area">
+    <!-- Calcarenite content (default visible) -->
+    <div data-content="calcarenite" class="content-pane">
+      <div class="text-[11px] text-[#5c6b7a] mb-2">(Athalassa Member, South Cyprus)</div>
+      <dl class="space-y-2.5 text-[#333] text-[13.5px]">
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Texture / Grain size</dt>
+          <dd class="leading-snug">Sand-sized (0.06–2 mm) carbonate grains, often cross-bedded. Feels gritty, like a sandstone made of shells.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</dt>
+          <dd class="leading-snug">Mostly calcite from bioclasts. High porosity (15–30%+) — water and salts penetrate easily.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</dt>
+          <dd class="leading-snug">Relatively soft and friable (Mohs ~3). Workable as building stone but vulnerable to weathering.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Age &amp; Environment</dt>
+          <dd class="leading-snug">Pliocene (~5–2.5 Ma). Shallow, high-energy marine seaway between rising landmasses. Cross-bedded sands.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Haloclasty Response</dt>
+          <dd class="leading-snug">Highly susceptible. Sea spray drives salt crystallization → classic tafoni (honeycomb) and granular sand.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Cyprus Context</dt>
+          <dd class="leading-snug">Historic building stone (“Nicosia calcarenite”). Valued today for its sculptural weathering and as a record of the island’s emergence.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Chalk content -->
+    <div data-content="chalk" class="content-pane hidden">
+      <div class="text-[11px] text-[#5c6b7a] mb-2">(e.g. Lefkara Formation)</div>
+      <dl class="space-y-2.5 text-[#333] text-[13.5px]">
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Texture / Grain size</dt>
+          <dd class="leading-snug">Extremely fine (mostly &lt;0.06 mm nannofossils &amp; micrite). Smooth, almost powdery when weathered.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</dt>
+          <dd class="leading-snug">Almost pure fine calcite. Very high porosity but tiny pores; more uniform and “chalky”.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</dt>
+          <dd class="leading-snug">Very soft. Scratches easily. Weathers more by dissolution/powdering than flaking.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Age &amp; Environment</dt>
+          <dd class="leading-snug">Much older (Paleogene, ~50+ Ma). Deep, quiet pelagic seas — fine ooze settling from the water column.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Haloclasty Response</dt>
+          <dd class="leading-snug">Less dramatic. Tends to soften and powder rather than develop deep tafoni.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Cyprus Context</dt>
+          <dd class="leading-snug">Widely used for carved architectural detail (softer to work). Forms the pale hills across much of the island.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Limestone (Reef / Hard) content -->
+    <div data-content="limestone" class="content-pane hidden">
+      <div class="text-[11px] text-[#5c6b7a] mb-2">(typical examples)</div>
+      <dl class="space-y-2.5 text-[#333] text-[13.5px]">
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Texture / Grain size</dt>
+          <dd class="leading-snug">Larger framework fossils bound in place. More massive and “stony” to the touch.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Composition &amp; Porosity</dt>
+          <dd class="leading-snug">Calcite framework + cement. Lower porosity, denser fabric overall.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Hardness &amp; Durability</dt>
+          <dd class="leading-snug">Harder and more resistant due to cementation and bound structure. Better for durable work.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Age &amp; Environment</dt>
+          <dd class="leading-snug">Variable (often Miocene or older reef build-ups). Warm, shallow, clear waters where organisms grew in place.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Haloclasty Response</dt>
+          <dd class="leading-snug">Much more resistant. Slower physical breakdown even when exposed to spray.</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-[#1f1f1f]">Cyprus Context</dt>
+          <dd class="leading-snug">Often used for more massive blocks or decorative elements. More resistant outcrops with different fossil assemblages.</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <p class="mt-3 text-[12px] text-[#666]">
+    All three are limestones (mostly CaCO₃), but grain size, porosity, and cementation determine how they behave along the coast.
+  </p>
+</div>
+
+<script>
+  function initComparisonTabs() {
+    const container = document.querySelector('.comparison-card');
+    if (!container) return;
+
+    const tabs = container.querySelectorAll('.tab-button');
+    const panes = container.querySelectorAll('.content-pane');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const type = tab.dataset.type;
+
+        // Update active tab
+        tabs.forEach(t => {
+          t.classList.remove('active', 'border-b-2', 'border-[#92400e]', 'text-[#92400e]');
+          t.classList.add('text-[#5c6b7a]');
+          t.setAttribute('aria-selected', 'false');
+        });
+
+        tab.classList.add('active', 'border-b-2', 'border-[#92400e]', 'text-[#92400e]');
+        tab.classList.remove('text-[#5c6b7a]');
+        tab.setAttribute('aria-selected', 'true');
+
+        // Show matching pane
+        panes.forEach(pane => {
+          if (pane.dataset.content === type) {
+            pane.classList.remove('hidden');
+          } else {
+            pane.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Ensure Calcarenite is active on load (in case HTML default changes)
+    const defaultTab = container.querySelector('.tab-button[data-type="calcarenite"]');
+    const defaultPane = container.querySelector('.content-pane[data-content="calcarenite"]');
+    if (defaultTab && defaultPane) {
+      tabs.forEach(t => t.classList.remove('active', 'border-b-2', 'border-[#92400e]', 'text-[#92400e]'));
+      defaultTab.classList.add('active', 'border-b-2', 'border-[#92400e]', 'text-[#92400e]');
+      panes.forEach(p => p.classList.add('hidden'));
+      defaultPane.classList.remove('hidden');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initComparisonTabs);
+  } else {
+    initComparisonTabs();
+  }
+</script>
+
+<style>
+  .tab-button {
+    transition: all 120ms ease;
+    border-bottom: 2px solid transparent;
+  }
+  .tab-button.active {
+    border-bottom-color: #92400e;
+    color: #92400e;
+  }
+  .content-pane {
+    transition: opacity 150ms ease;
+  }
+  .comparison-card dl dt {
+    font-size: 0.8em;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: #4a4a4a;
+    margin-bottom: 1px;
+  }
+  .comparison-card dl dd {
+    margin-bottom: 0.35em;
+  }
+</style>

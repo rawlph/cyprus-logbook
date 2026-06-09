@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  name: string;
+  children?: any;
+}
+
+const { name } = Astro.props;
+
+// Find the glossary term (case-insensitive)
+const glossary = await getCollection('glossary');
+const match = glossary.find(
+  (entry) =>
+    entry.data.term.toLowerCase() === name.toLowerCase() ||
+    entry.slug.toLowerCase() === name.toLowerCase()
+);
+
+const term = match?.data.term ?? name;
+const definition = match?.data.definition ?? 'A term from the Cypriot landscape and memory.';
+const greek = match?.data.greek;
+const etymology = match?.data.etymology;
+
+// Build a compact tooltip text
+const tooltip = [
+  definition,
+  greek ? `Greek: ${greek}` : '',
+  etymology ? `(${etymology})` : '',
+]
+  .filter(Boolean)
+  .join(' • ');
+---
+
+<span
+  class="glossary-term group relative cursor-help border-b border-dotted border-current/40 pb-px transition-colors hover:border-current/70"
+  data-term={match?.slug ?? name.toLowerCase()}
+  data-definition={definition}
+  data-greek={greek ?? ''}
+  data-etymology={etymology ?? ''}
+  title={tooltip}
+>
+  {Astro.props.children ?? term}
+</span>
+
+<style>
+  .glossary-term {
+    text-underline-offset: 3px;
+  }
+</style>

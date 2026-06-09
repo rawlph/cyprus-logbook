@@ -1,17 +1,87 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="The crew’s log"
+  description="A calm maritime archive of Cyprus — botanical, geological, historical, religious, and linguistic observations collected with care."
+>
+  <main class="mx-auto max-w-3xl px-5 pt-11 pb-14">
+    <div class="max-w-[62ch]">
+      <div class="flex items-center gap-2 text-xs tracking-[2px] text-[#5f5f5f] mb-2">
+        <span>CYPRUS</span>
+        <span class="inline-block w-6 h-px bg-[#5f5f5f]/40"></span>
+        <span>AT SEA</span>
+      </div>
+
+      <h1 class="font-serif text-[50px] leading-[1.0] tracking-[-1.7px] text-[#1c1c1c]">
+        The crew’s log
+      </h1>
+
+      <p class="mt-4 text-[16.5px] leading-relaxed text-[#3c3c3c]">
+        A quiet collection of observations from the shores, mountains, and waters of Cyprus.
+        What the island reveals — in leaf and stone, in old words, and in memory.
+      </p>
+    </div>
+
+    <!-- Calm, prominent category currents — no pills, no cards -->
+    <div class="mt-10 max-w-[62ch]">
+      <div class="text-[10px] tracking-[1.5px] text-[#6a6a6a] mb-3">THE CURRENTS</div>
+
+      <div class="space-y-5 text-[15px]">
+        <a href="/archive?topic=Botany" class="group flex items-baseline gap-3 hover:text-black transition-colors">
+          <span class="block h-px w-7 shrink-0 bg-[#166534] group-hover:w-9 transition-all self-center"></span>
+          <span class="flex items-center gap-x-[0.5em]">
+            <span class="font-medium text-[#166534]">Botany</span>
+            <span class="inline-block w-[0.8em] h-px bg-[#8a8a8a] align-middle"></span>
+            <span class="text-[#4a4a4a] group-hover:text-[#333]">trees, groves, resin, and the green life of the island</span>
+          </span>
+        </a>
+
+        <a href="/archive?topic=Geology" class="group flex items-baseline gap-3 hover:text-black transition-colors">
+          <span class="block h-px w-7 shrink-0 bg-[#92400e] group-hover:w-9 transition-all self-center"></span>
+          <span class="flex items-center gap-x-[0.5em]">
+            <span class="font-medium text-[#92400e]">Geology</span>
+            <span class="inline-block w-[0.8em] h-px bg-[#8a8a8a] align-middle"></span>
+            <span class="text-[#4a4a4a] group-hover:text-[#333]">the ancient stone and the sea floor lifted into mountains</span>
+          </span>
+        </a>
+
+        <a href="/archive?topic=History" class="group flex items-baseline gap-3 hover:text-black transition-colors">
+          <span class="block h-px w-7 shrink-0 bg-[#1e3a5f] group-hover:w-9 transition-all self-center"></span>
+          <span class="flex items-center gap-x-[0.5em]">
+            <span class="font-medium text-[#1e3a5f]">History</span>
+            <span class="inline-block w-[0.8em] h-px bg-[#8a8a8a] align-middle"></span>
+            <span class="text-[#4a4a4a] group-hover:text-[#333]">fragments of time, commanderies, and those who crossed these waters</span>
+          </span>
+        </a>
+
+        <a href="/archive?topic=Religion" class="group flex items-baseline gap-3 hover:text-black transition-colors">
+          <span class="block h-px w-7 shrink-0 bg-[#854d0e] group-hover:w-9 transition-all self-center"></span>
+          <span class="flex items-center gap-x-[0.5em]">
+            <span class="font-medium text-[#854d0e]">Religion</span>
+            <span class="inline-block w-[0.8em] h-px bg-[#8a8a8a] align-middle"></span>
+            <span class="text-[#4a4a4a] group-hover:text-[#333]">painted churches, quiet devotions, and the long thread of the sacred</span>
+          </span>
+        </a>
+
+        <a href="/archive?topic=Language" class="group flex items-baseline gap-3 hover:text-black transition-colors">
+          <span class="block h-px w-7 shrink-0 bg-[#1e40af] group-hover:w-9 transition-all self-center"></span>
+          <span class="flex items-center gap-x-[0.5em]">
+            <span class="font-medium text-[#1e40af]">Language</span>
+            <span class="inline-block w-[0.8em] h-px bg-[#8a8a8a] align-middle"></span>
+            <span class="text-[#4a4a4a] group-hover:text-[#333]">words, names, and the memory carried in Greek and older tongues</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-9 max-w-[62ch]">
+      <div class="wave-divider"></div>
+    </div>
+
+    <div class="mt-6 text-xs text-[#666] max-w-[55ch]">
+      A living logbook. New entries appear as the crew returns from the field.
+    </div>
+  </main>
+</BaseLayout>

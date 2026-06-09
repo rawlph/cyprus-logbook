@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const terms = await getCollection('glossary');
+
+// Sort alphabetically by term
+const sortedTerms = [...terms].sort((a, b) =>
+  a.data.term.localeCompare(b.data.term, 'en', { sensitivity: 'base' })
+);
+---
+
+<BaseLayout title="Glossary — The crew’s log">
+  <main class="mx-auto max-w-3xl px-5 pt-10 pb-20">
+    <div class="max-w-[62ch]">
+      <h1 class="font-serif text-[36px] tracking-[-0.6px]">Glossary</h1>
+      <p class="mt-2 text-[#555]">
+        Key terms, Greek names, and etymological notes that appear throughout the log.
+        Click any term in an entry to see a quick definition.
+      </p>
+    </div>
+
+    <div class="mt-10 space-y-9">
+      {sortedTerms.map((term) => (
+        <div id={term.slug} class="scroll-mt-8 border-l-2 border-black/10 pl-5">
+          <div class="flex items-baseline gap-x-3">
+            <h2 class="font-medium text-xl tracking-tight">{term.data.term}</h2>
+            {term.data.greek && (
+              <span class="font-mono text-sm text-[#666]">{term.data.greek}</span>
+            )}
+          </div>
+
+          <p class="mt-2 text-[15px] leading-relaxed text-[#333]">{term.data.definition}</p>
+
+          {term.data.etymology && (
+            <p class="mt-2 text-sm italic text-[#555]">
+              {term.data.etymology}
+            </p>
+          )}
+
+          {term.data.notes && (
+            <p class="mt-2 text-sm text-[#444]">{term.data.notes}</p>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-14 text-sm text-[#666]">
+      Terms are added as new entries are written. Click a <span class="border-b border-dotted">dotted term</span> anywhere in the log to reveal its meaning.
+    </div>
+  </main>
+</BaseLayout>

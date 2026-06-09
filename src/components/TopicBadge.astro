@@ -1,0 +1,28 @@
+---
+interface Props {
+  topic: 'Botany' | 'Geology' | 'History' | 'Religion' | 'Language';
+  size?: 'sm' | 'md';
+}
+
+const { topic, size = 'md' } = Astro.props;
+
+// Richer, more maritime / slightly whimsical palette
+const colors: Record<string, string> = {
+  Botany:   'bg-[#166534] text-[#e6f0e6] border-[#14532d]/70',
+  Geology:  'bg-[#92400e] text-[#fef3e2] border-[#78350f]/70',
+  History:  'bg-[#1e3a5f] text-[#e0e9f3] border-[#1e3a5f]/70',
+  Religion: 'bg-[#854d0e] text-[#fef7e8] border-[#713f12]/70',
+  Language: 'bg-[#1e40af] text-[#e0e9ff] border-[#1e3a8a]/70',
+};
+
+const sizes = {
+  sm: 'text-[10px] px-2 py-px tracking-[0.6px]',
+  md: 'text-[11px] px-2.5 py-0.5 tracking-[0.8px]',
+};
+---
+
+<span
+  class={`inline-block font-mono uppercase rounded border ${colors[topic]} ${sizes[size]}`}
+>
+  {topic}
+</span>
